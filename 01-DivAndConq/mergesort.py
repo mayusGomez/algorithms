@@ -23,20 +23,19 @@ def merge(numbers_list):
     i = 0
     j = 0
 
-    for k in numbers_list:
-        if i < len(numbers_list_a) and j < len(numbers_list_b):
-            if numbers_list_a[i] <= numbers_list_b[j]:
-                result.append(numbers_list_a[i])
-                i += 1
-            else:
-                result.append(numbers_list_b[j])
-                j += 1
+    while i < len(numbers_list_a) and j < len(numbers_list_b):
+        if numbers_list_a[i] <= numbers_list_b[j]:
+            result.append(numbers_list_a[i])
+            i += 1
         else:
-            if i >= len(numbers_list_a):
-                result += numbers_list_b[j:]
-            else:
-                result += numbers_list_a[i:]
-            break
+            result.append(numbers_list_b[j])
+            j += 1
+
+    if i >= len(numbers_list_a):
+        result += numbers_list_b[j:]
+    else:
+        result += numbers_list_a[i:]
+
 
     return result
 
