@@ -41,7 +41,7 @@ def merge(numbers_list):
 
 
 if __name__ == '__main__':
-    numbers_list = [random.randint(0, 100) for x in range(21)]
+    numbers_list = [random.randint(0, 100) for x in range(50)]
     print(f'intial: {numbers_list}')
     numbers_list = merge(numbers_list)
     print(f'result: {numbers_list}')
