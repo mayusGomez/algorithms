@@ -45,6 +45,14 @@ def karatsuba_mult(x_str: str, y_str: str):
     """
     Karatsuba multiplication
 
+    Both numbers be power of two, the algorithm of karatsuba is:
+    1. Numbers to multiply: 8976 * 3421
+    2. Divide the problem: a=89, b=76, c=34, d=21
+    3.1. Compute: a*c
+    3.2. Compute: b*d
+    3.3. Compute: (a+b)*(c+d)
+    3.4. Compute: (3.3) - (3.2) - (3.1)
+    3.5. Compute: (3.1)*(10**len(8976)) + (3.2) + ((3.4)*(10**(len(8976)/2)))
 
     :param x: number 01
     :param y: number 02
@@ -54,7 +62,7 @@ def karatsuba_mult(x_str: str, y_str: str):
 
     # Base case, both numbers have 1 digit
     if len(x_str) == len(y_str) == 1:
-        return functools.reduce(operator.add, [int(x)]*int(y))
+        return functools.reduce(operator.add, [int(x_str)]*int(y_str))
     else:
         None
 
