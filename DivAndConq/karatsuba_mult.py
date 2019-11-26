@@ -41,11 +41,11 @@ def fix_number_length(x_fix: str, y_fix: str):
     return x_fix, y_fix
 
 
-def karatsuba_mult(x_str: str, y_str: str) -> int:
+def recursive_karatsuba_mult(x_str: str, y_str: str) -> int:
     """
-    Karatsuba multiplication
+    Karatsuba multiplication implementation
 
-    Both numbers be power of two, the algorithm of karatsuba is:
+    Both numbers must be power of two, the algorithm of karatsuba is:
     1. Numbers to multiply: 8976 * 3421
     2. Divide the problem: a=89, b=76, c=34, d=21
     3.1. Compute: a*c
@@ -54,6 +54,10 @@ def karatsuba_mult(x_str: str, y_str: str) -> int:
     3.4. Compute: (3.3) - (3.2) - (3.1)
     3.5. Compute: (3.1)*(10**len(8976)) + (3.2) + ((3.4)*(10**(len(8976)/2)))
 
+    Base case:
+    - Some number is zero
+    - some number is < 10
+
     :param x: number 01 : str
     :param y: number 02 : str
     :return: number 01 * number 02
@@ -61,10 +65,12 @@ def karatsuba_mult(x_str: str, y_str: str) -> int:
     number_digits = len(x_str)
     number_digits_mid = int(number_digits / 2)
 
-    # Base case, both numbers have 1 digit
+    # Base case, 1 digit or zero
     if int(x_str) == 0 or int(y_str) == 0:
         return 0
-    elif len(x_str) == len(y_str) == 1:
+    elif int(x_str) < 10:
+        return functools.reduce(operator.add, [int(y_str)] * int(x_str))
+    elif int(y_str) < 10:
         return functools.reduce(operator.add, [int(x_str)]*int(y_str))
     else:
         a = x_str[:number_digits_mid]
@@ -72,19 +78,20 @@ def karatsuba_mult(x_str: str, y_str: str) -> int:
         c = y_str[:number_digits_mid]
         d = y_str[number_digits_mid:]
 
-        compute_01 = karatsuba_mult(a, c)
-        compute_02 = karatsuba_mult(b, d)
+        compute_01 = recursive_karatsuba_mult(a, c)
+        compute_02 = recursive_karatsuba_mult(b, d)
 
-        compute_03_1 = str(int(a)+int(b))
-        compute_03_2 = str(int(c)+int(d))
-        compute_03_1, compute_03_2 = fix_number_length(compute_03_1, compute_03_2)
+        compute_03_1 = int(a)+int(b)
+        compute_03_2 = int(c)+int(d)
         compute_03 = karatsuba_mult(compute_03_1, compute_03_2)
 
         compute_04 = compute_03 - compute_02 - compute_01
 
+        # Multiply by 10.... adding zeros
         compute_05_1_power_str = '0' * number_digits
         compute_05_1 = int(str(compute_01) + compute_05_1_power_str)
 
+        # Multiply by 10.... adding zeros
         compute_05_2_power_str = '0' * (number_digits//2)
         compute_05_2 = int(str(compute_04) + compute_05_2_power_str)
 
@@ -93,9 +100,21 @@ def karatsuba_mult(x_str: str, y_str: str) -> int:
         return compute_05
 
 
+def karatsuba_mult(x: int, y: int) -> int:
+    """
+    Karatsuba multiplication of two numbers
+
+    First fix the numbers length (power of 2) and then call the recursive method
+    :param x: number 1
+    :param y: number 2
+    :return: recursive_karatsuba_mult(number 1 , number 2)
+    """
+    x_str, y_str = fix_number_length(str(x), str(y))
+    return recursive_karatsuba_mult(x_str, y_str)
+
+
 if __name__ == '__main__':
     x = 3141592653589793238462643383279502884197169399375105820974944592
     y = 2718281828459045235360287471352662497757247093699959574966967627
-    x, y = fix_number_length(str(x), str(y))
     result = karatsuba_mult(x, y)
     print('x[{}] * y[{}] = {}'.format(x, y, result))

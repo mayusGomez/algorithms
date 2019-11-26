@@ -1,5 +1,5 @@
 import pytest
-from DivAndConq.karatsuba_mult import karatsuba_mult, fix_number_length
+from DivAndConq.karatsuba_mult import karatsuba_mult, fix_number_length, recursive_karatsuba_mult
 
 
 def test_01_fix_number_length():
@@ -24,28 +24,28 @@ def test_03_fix_number_length():
 def test_1d_karatsuba_mult():
     x = '2'
     y = '8'
-    assert karatsuba_mult(x, y) == (int(x) * int(y))
+    assert recursive_karatsuba_mult(x, y) == (int(x) * int(y))
 
 
 def test_2d_karatsuba_mult():
     x = '92'
     y = '81'
-    assert karatsuba_mult(x, y) == (int(x) * int(y))
+    assert recursive_karatsuba_mult(x, y) == (int(x) * int(y))
 
 
 def test_4d_karatsuba_mult():
     x = '9276'
     y = '8312'
-    assert karatsuba_mult(x, y) == (int(x) * int(y))
+    assert recursive_karatsuba_mult(x, y) == (int(x) * int(y))
 
 
 def test_8d_karatsuba_mult():
     x = '92764576'
     y = '81431254'
-    assert karatsuba_mult(x, y) == (int(x) * int(y))
+    assert recursive_karatsuba_mult(x, y) == (int(x) * int(y))
 
 
 def test_xd_karatsuba_mult():
     x = '3141592653589793238462643383279502884197169399375105820974944592'
     y = '2718281828459045235360287471352662497757247093699959574966967627'
-    assert karatsuba_mult(x, y) == (int(x) * int(y))
+    assert recursive_karatsuba_mult(x, y) == (int(x) * int(y))
