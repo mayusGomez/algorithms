@@ -16,6 +16,10 @@ def brute_force(numbers: list) -> int:
     return count
 
 
+def recursive_aproach(numbers: list) -> int:
+    return 0
+
+
 if __name__ == '__main__':
     with open('IntegerArray.txt') as file:
         numbers = file.read().rstrip('\n').split('\n')
