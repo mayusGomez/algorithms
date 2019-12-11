@@ -12,12 +12,13 @@ def partition(data: list = None, start_idx: int = None, last: int = None):
     :return comparisons: number of comparisons executed
     """
     i = start_idx + 1
+    #  compare every number with the pivot (first element)
     for j in range(i, last):
         if data[j] < data[start_idx]:
             data[j], data[i] = data[i], data[j]  # swap position with i
             i += 1
 
-    data[start_idx], data[i-1] = data[i-1], data[start_idx]
+    data[start_idx], data[i-1] = data[i-1], data[start_idx]  # swap pivot
     logging.debug(f'partition, array:{data[start_idx:last]}, pivot={i-1}, comparisons={last-start_idx-1}')
 
     pivot_idx = i-1
@@ -37,10 +38,10 @@ def pivot_median_of_3(data: list = None, start_idx: int = None, last: int = None
     second parts of this programming assignment, be sure to implement Partition exactly as described in the video lectures
     (including exchanging the pivot element with the first element just before the main Partition subroutine).
 
-    :param data:
-    :param start_idx:
-    :param last:
-    :return:
+    :param data: iterable with number unsorted
+    :param start_idx: index of first element of sub-array
+    :param last: last element of sub-array
+    :return: index of pivot
     """
     length = last - start_idx
     middle_idx = start_idx + (length // 2)
@@ -66,9 +67,10 @@ def pivot_median_of_3(data: list = None, start_idx: int = None, last: int = None
 def pivot_last(data: list = None, start_idx: int = None, last: int = None):
     """
     Choose the last element for pivot
-    :param data:
-    :param start_idx:
-    :param last:
+
+    :param data: iterable with number unsorted
+    :param start_idx: index of first element of sub-array
+    :param last: last element of sub-array
     :return: pivot index
     """
     return last - 1
@@ -82,8 +84,8 @@ def quicksort(data: list = None, start_idx: int = None, last: int = None, pivot_
     :param data: iterable with number unsorted
     :param start_idx: index of first element of sub-array
     :param last: last element of sub-array
-    :param pivot_function:
-    :return:
+    :param pivot_function: function to chose the pivot, default first element
+    :return: total comparisons executed to order the array
     """
     logging.debug(f'Quicksort, array:{data[start_idx:last]}')
 
@@ -106,12 +108,6 @@ if __name__ == '__main__':
     """with open('quicksort_01.txt') as file:
         numbers = file.read().rstrip('\n').split('\n')
     numbers = [int(x) for x in numbers]
-    logging.debug(f'total comparisons:{total_comparisons}')
-    logging.debug(f'first number:{numbers[0]}')
-    logging.debug(f'last number:{numbers[-1]}')
-    logging.debug(f'3457 number:{numbers[3456]}')
-    logging.debug(f'5678 number:{numbers[5677]}')
-    logging.debug(f'8934 number:{numbers[8933]}')
     """
     numbers = [5, 4, 7, 1, 2, 10, 8, 9, 6, 3]
     total_comparisons = quicksort(numbers, 0, len(numbers))
