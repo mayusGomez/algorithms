@@ -5,10 +5,11 @@ def partition(data: list = None, start_idx: int = None, last: int = None):
     """
     Execute the partition of quicksort around a pivot
 
-    :param data:
-    :param start_idx:
-    :param last:
-    :return:
+    :param data: array of numbers
+    :param start_idx: index of first element of sub-array
+    :param last: last element of sub-array
+    :return pivot_idx: pivot of array partitioned
+    :return comparisons: number of comparisons executed
     """
     i = start_idx + 1
     for j in range(i, last):
@@ -19,16 +20,16 @@ def partition(data: list = None, start_idx: int = None, last: int = None):
     data[start_idx], data[i-1] = data[i-1], data[start_idx]
     logging.debug(f'partition, array:{data[start_idx:last]}, pivot={i-1}, comparisons={last-start_idx-1}')
 
-    """pivot_idx = (len(data[start_idx: last]) // 2) + start_idx
-    comparisons = 0"""
-    return i-1, (last-start_idx-1)
+    pivot_idx = i-1
+    comparisons = (last-start_idx-1)
+    return pivot_idx, comparisons
 
 
 def pivot_median(data: list = None, start_idx: int = None, end_idx: int = None):
     return start_idx + 1
 
 
-def quicksort(data: list = None, start_idx: int = None, last: int = None, pivot_function=None) -> None:
+def quicksort(data: list = None, start_idx: int = None, last: int = None, pivot_function=None) -> int:
     """
     Quicksort
 
@@ -42,7 +43,7 @@ def quicksort(data: list = None, start_idx: int = None, last: int = None, pivot_
     logging.debug(f'Quicksort, array:{data[start_idx:last]}')
 
     if start_idx + 1 >= last:
-        return
+        return 0
 
     if pivot_function:
         #  by default choose the first element for pivot, else use the function received
@@ -50,12 +51,20 @@ def quicksort(data: list = None, start_idx: int = None, last: int = None, pivot_
         data[start_idx], data[pivot_chosen] = data[pivot_chosen], data[start_idx]  # swap pivot to first position
 
     pivot_idx, comparisons = partition(data, start_idx, last)
-    quicksort(data, start_idx, pivot_idx, pivot_function)  # left array
-    quicksort(data, pivot_idx+1, last, pivot_function)  # right array
+    comparisons_left = quicksort(data, start_idx, pivot_idx, pivot_function)  # left array
+    comparisons_right = quicksort(data, pivot_idx+1, last, pivot_function)  # right array
+    return comparisons + comparisons_left + comparisons_right
 
 
 if __name__ == '__main__':
     logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.DEBUG)
-    l = [5, 4, 7, 1, 2, 3, 8, 9, 6, 10]
-    quicksort(l, 0, len(l))
-    logging.debug(f'final array:{l}')
+    with open('quicksort_01.txt') as file:
+        numbers = file.read().rstrip('\n').split('\n')
+    numbers = [int(x) for x in numbers]
+    total_comparisons = quicksort(numbers, 0, len(numbers))
+    logging.debug(f'total comparisons:{total_comparisons}')
+    logging.debug(f'first number:{numbers[0]}')
+    logging.debug(f'last number:{numbers[-1]}')
+    logging.debug(f'3457 number:{numbers[3456]}')
+    logging.debug(f'5678 number:{numbers[5677]}')
+    logging.debug(f'8934 number:{numbers[8933]}')
